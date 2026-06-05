@@ -9,3 +9,7 @@ main = "dist/server/server.js"
 [assets]
 directory = "./dist/client"
 
+[build]
+command = "npm run build"
+
+
