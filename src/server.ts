@@ -38,7 +38,37 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 export default {
-  async fetch(request: Request, env: unknown, ctx: unknown) {
+  async fetch(request: Request, env: any, ctx: unknown) {
+    const url = new URL(request.url);
+
+    // Route websocket endpoint: Proxy to PieSocket Free Channel
+    if (url.pathname === "/ws") {
+      const upgradeHeader = request.headers.get("Upgrade");
+      if (!upgradeHeader || upgradeHeader !== "websocket") {
+        return new Response("Expected Upgrade: websocket", { status: 426 });
+      }
+
+      // Unique channel identifier for the robotic arm (prevents conflict with others)
+      const channelId = "hivearm-relay-prod-a5b8-c3d9";
+      const apiKey = "VCkv3907HmCcj2i1tlJgq781a56s25a5"; // PieSocket Public Demo Key
+      
+      const targetUrl = `https://demo.piesocket.com/v3/${channelId}?api_key=${apiKey}`;
+
+      // Create outbound proxy request
+      const proxyRequest = new Request(targetUrl, {
+        method: request.method,
+        headers: request.headers,
+        body: request.body,
+        redirect: "follow",
+      });
+
+      // Override Host header for the target server
+      proxyRequest.headers.set("Host", "demo.piesocket.com");
+
+      // Execute proxy fetch (Cloudflare handles the WebSocket tunnel natively)
+      return fetch(proxyRequest);
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

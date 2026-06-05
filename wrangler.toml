@@ -1,4 +1,4 @@
-name = "hivearmcontrol"
+name = "hivearm"
 compatibility_date = "2026-06-05"
 compatibility_flags = ["nodejs_compat"]
 
@@ -8,3 +8,4 @@ main = "dist/server/server.js"
 # Static client assets served alongside the Worker
 [assets]
 directory = "./dist/client"
+
