@@ -1,0 +1,155 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-honey: var(--honey);
+  --color-honey-glow: var(--honey-glow);
+  --color-cyber: var(--cyber);
+  --color-danger: var(--danger);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* Light theme — warm honey on cream */
+  --background: oklch(0.985 0.008 85);
+  --foreground: oklch(0.18 0.02 250);
+  --card: oklch(0.97 0.01 85);
+  --card-foreground: oklch(0.18 0.02 250);
+  --popover: oklch(0.99 0.005 85);
+  --popover-foreground: oklch(0.18 0.02 250);
+  --primary: oklch(0.68 0.18 65);
+  --primary-foreground: oklch(0.99 0.005 85);
+  --secondary: oklch(0.94 0.012 85);
+  --secondary-foreground: oklch(0.2 0.02 250);
+  --muted: oklch(0.94 0.012 85);
+  --muted-foreground: oklch(0.45 0.02 250);
+  --accent: oklch(0.6 0.14 200);
+  --accent-foreground: oklch(0.99 0.005 85);
+  --destructive: oklch(0.58 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.85 0.02 85 / 80%);
+  --input: oklch(0.94 0.012 85);
+  --ring: oklch(0.68 0.18 65);
+
+  --honey: oklch(0.68 0.18 65);
+  --honey-glow: oklch(0.78 0.18 75);
+  --cyber: oklch(0.6 0.14 200);
+  --danger: oklch(0.6 0.22 25);
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html, body, #root { height: 100%; }
+  html {
+    color-scheme: light;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow-x: hidden;
+    font-size: 116%;
+  }
+  ::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+  }
+  body {
+    overflow-x: hidden;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in oklab, var(--primary) 18%, transparent), transparent),
+      radial-gradient(ellipse 60% 50% at 100% 100%, color-mix(in oklab, var(--accent) 10%, transparent), transparent);
+    background-attachment: fixed;
+    transition: background-color 0.4s ease, color 0.3s ease;
+  }
+  body, .theme-surface {
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease;
+  }
+}
+
+@utility hex-grid {
+  background-color: transparent;
+  background-image:
+    linear-gradient(30deg, oklch(0.82 0.17 85 / 0.06) 12%, transparent 12.5%, transparent 87%, oklch(0.82 0.17 85 / 0.06) 87.5%),
+    linear-gradient(150deg, oklch(0.82 0.17 85 / 0.06) 12%, transparent 12.5%, transparent 87%, oklch(0.82 0.17 85 / 0.06) 87.5%),
+    linear-gradient(30deg, oklch(0.82 0.17 85 / 0.06) 12%, transparent 12.5%, transparent 87%, oklch(0.82 0.17 85 / 0.06) 87.5%),
+    linear-gradient(150deg, oklch(0.82 0.17 85 / 0.06) 12%, transparent 12.5%, transparent 87%, oklch(0.82 0.17 85 / 0.06) 87.5%);
+  background-size: 40px 70px;
+  background-position: 0 0, 0 0, 20px 35px, 20px 35px;
+}
+
+@utility glow-honey {
+  box-shadow: 0 0 30px -5px oklch(0.82 0.17 85 / 0.45), inset 0 0 20px -10px oklch(0.82 0.17 85 / 0.3);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 20px oklch(0.82 0.17 85 / 0.6);
+}
+
+.hive-slider {
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, oklch(0.82 0.17 85), oklch(0.22 0.02 250));
+  border-radius: 999px;
+  outline: none;
+}
+.hive-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: oklch(0.88 0.19 90);
+  border: 2px solid oklch(0.14 0.015 250);
+  box-shadow: 0 0 12px oklch(0.82 0.17 85 / 0.8);
+  cursor: pointer;
+}
+.hive-slider::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: oklch(0.88 0.19 90);
+  border: 2px solid oklch(0.14 0.015 250);
+  box-shadow: 0 0 12px oklch(0.82 0.17 85 / 0.8);
+  cursor: pointer;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: 0.6; box-shadow: 0 0 0 8px transparent; }
+}
+.pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.float-slow { animation: float-slow 6s ease-in-out infinite; }
