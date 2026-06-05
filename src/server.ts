@@ -50,7 +50,7 @@ export default {
 
       // Unique channel identifier for the robotic arm (prevents conflict with others)
       const channelId = "hivearm-relay-prod-a5b8-c3d9";
-      const apiKey = "VCkv3907HmCcj2i1tlJgq781a56s25a5"; // PieSocket Public Demo Key
+      const apiKey = "oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm"; // Valid PieSocket Public Demo Key
       
       const targetUrl = `https://demo.piesocket.com/v3/${channelId}?api_key=${apiKey}`;
 
@@ -62,8 +62,11 @@ export default {
         redirect: "follow",
       });
 
-      // Override Host header for the target server
+      // Override Host header and remove client-specific socket headers
       proxyRequest.headers.set("Host", "demo.piesocket.com");
+      proxyRequest.headers.delete("sec-websocket-key");
+      proxyRequest.headers.delete("sec-websocket-extensions");
+      proxyRequest.headers.delete("sec-websocket-accept");
 
       // Execute proxy fetch (Cloudflare handles the WebSocket tunnel natively)
       return fetch(proxyRequest);
