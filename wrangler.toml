@@ -10,6 +10,4 @@ main = "dist/server/server.js"
 directory = "./dist/client"
 
 [build]
-command = "npm run build"
-
-
+command = "bun run build"

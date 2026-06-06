@@ -34,18 +34,7 @@ export const Route = createFileRoute("/")({
 
 type ConnState = "disconnected" | "connecting" | "connected";
 
-const DEFAULT_WS = "wss://hivearm.noreplyglobalx1.workers.dev/ws";
-
-const getInitialWsUrl = () => {
-  if (typeof window !== "undefined") {
-    const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
-    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-      return DEFAULT_WS;
-    }
-    return `${proto}//${window.location.host}/ws`;
-  }
-  return DEFAULT_WS;
-};
+const DEFAULT_WS = "wss://demo.piesocket.com/v3/hivearm-relay-prod-a5b8-c3d9?api_key=oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm";
 
 const PRESETS: Record<string, ArmState> = {
   home:    { base: -14,   shoulder: 4,   elbow: 0,    wrist: 0,   camera: 0,   temperature: 25 },
@@ -56,7 +45,7 @@ const PRESETS: Record<string, ArmState> = {
 
 function HiveArm() {
   const [state, setState] = useState<ArmState>(PRESETS.home);
-  const [wsUrl, setWsUrl] = useState(getInitialWsUrl);
+  const [wsUrl, setWsUrl] = useState(DEFAULT_WS);
   const [conn, setConn] = useState<ConnState>("disconnected");
   const [log, setLog] = useState<string[]>([
     "[boot] HiveArm interface initialized",
@@ -263,7 +252,7 @@ function HiveArm() {
 
           {/* Connection bar */}
           <div className="mt-6 rounded-2xl border border-border/60 bg-card/60 p-4 flex flex-col md:flex-row gap-3 md:items-center">
-            <p className="text-sm text-primary font-mono mb-2 md:mb-0 md:mr-4">Connect to <code className="bg-muted/30 px-1 py-0.5 rounded">wss://hivearm.noreplyglobalx1.workers.dev/ws</code> to enable real‑time control.</p>
+            <p className="text-sm text-primary font-mono mb-2 md:mb-0 md:mr-4">Connect to the WebSocket broker channel to enable real‑time control.</p>
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground shrink-0">
               <Plug className="w-4 h-4 text-primary" /> WebSocket URI
             </div>
@@ -272,7 +261,7 @@ function HiveArm() {
               onChange={(e) => setWsUrl(e.target.value)}
               disabled={conn !== "disconnected"}
               className="flex-1 bg-input/60 border border-border/60 rounded-md px-3 py-2 text-sm font-mono text-foreground focus:outline-none focus:border-primary/60 disabled:opacity-60"
-              placeholder="wss://hivearm.noreplyglobalx1.workers.dev/ws"
+              placeholder="wss://demo.piesocket.com/v3/channel_id?api_key=..."
             />
             {conn === "disconnected" ? (
               <button onClick={connect} className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-mono uppercase tracking-[0.2em] text-primary-foreground hover:opacity-90">

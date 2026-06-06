@@ -13,22 +13,17 @@ Preferences preferences;
 WebServer setupServer(80);
 bool isAPMode = false;
 
-// --- Secure WebSocket Client (Outbound to Cloudflare Worker) ---
+// --- Secure WebSocket Client (Direct to PieSocket) ---
 WebSocketsClient webSocket;
 
-const char* wsHost = "hivearm.noreplyglobalx1.workers.dev";
+const char* wsHost = "demo.piesocket.com";
 const int wsPort = 443;
-const char* wsPath = "/ws";
+const char* wsPath = "/v3/hivearm-relay-prod-a5b8-c3d9?api_key=oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm";
 
 bool wsConnected = false;
 unsigned long lastWsReconnectAttempt = 0;
 const unsigned long wsReconnectInterval = 5000;
 
-// Current Cloudflare certificate SHA-1 fingerprint (space-separated)
-// NOTE: Fingerprints expire when the server SSL certificate rotates (usually every 90 days).
-// To avoid needing this fingerprint, please update the "WebSockets" library by Links2004
-// to the latest version in the Arduino IDE Library Manager, then you can use `webSocket.setInsecure();`.
-const char* sslFingerprint = "DA F0 D6 BA 59 43 E4 EB ED 99 A7 49 1D 47 DE 62 66 FA 24 B5";
 
 // --- PCA9685 Servo Driver ---
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
@@ -244,12 +239,10 @@ void setup() {
       Serial.print("[WIFI] IP Address: ");
       Serial.println(WiFi.localIP());
       
-      // Start Secure WebSocket Client connection to Cloudflare Worker
-      Serial.println("[WSS] Connecting to Cloudflare Worker...");
+      // Start Secure WebSocket Client connection
+      Serial.println("[WSS] Connecting to WebSocket server...");
       
-      // Passing the certificate fingerprint directly in beginSSL to bypass
-      // version issues on older versions of the WebSockets library.
-      webSocket.beginSSL(wsHost, wsPort, wsPath, sslFingerprint);
+      webSocket.beginSSL(wsHost, wsPort, wsPath);
       webSocket.onEvent(webSocketEvent);
       lastWsReconnectAttempt = millis();
     } else {
@@ -280,9 +273,9 @@ void loop() {
   if (!wsConnected) {
     if (millis() - lastWsReconnectAttempt > wsReconnectInterval) {
       lastWsReconnectAttempt = millis();
-      Serial.println("[WSS] Reconnecting to Cloudflare Worker...");
+      Serial.println("[WSS] Reconnecting to WebSocket server...");
       
-      webSocket.beginSSL(wsHost, wsPort, wsPath, sslFingerprint);
+      webSocket.beginSSL(wsHost, wsPort, wsPath);
     }
   }
 
